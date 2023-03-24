@@ -30,6 +30,8 @@ import MapView, { Details, LatLng, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Re
 import { enableLatestRenderer } from 'react-native-maps';
 import RNLocation, { Subscription } from 'react-native-location';
 import { Location } from './Models/Location';
+
+
 enableLatestRenderer();
 RNLocation.configure({
   distanceFilter: 5.0
@@ -70,6 +72,7 @@ RNLocation.requestPermission({
 
 function App(): JSX.Element {
 
+
   RNLocation.requestPermission({
     ios: "whenInUse",
     android: {
@@ -79,6 +82,7 @@ function App(): JSX.Element {
     if (granted) {
       let locationSubscription = RNLocation.subscribeToLocationUpdates((locations): Location[] => {
         setLocation(locations)
+        setparkingSpaces(locations)
         return locations
         /* Example location returned
         {
@@ -101,11 +105,14 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const mapRegionChangehandle = (region: any) => {
     setRegion(region);
+    //dispatch(currentloc(region[0]))
+
   };
 
 
-  
 
+  
+  const [parkingSpaces,setparkingSpaces] = useState<Location[]>([])
   const [currentLocation, setCurrentLocation] = React.useState<Location[]>(null);
   const [region, setRegion] = React.useState<Region>(initialRegion);
 
@@ -113,14 +120,22 @@ function App(): JSX.Element {
     console.log("map location : " + JSON.stringify(locations));
 
     setCurrentLocation(locations)
-
+    setparkingSpaces(locations)
   }
   const initialRegion: Region = {
     latitude: currentLocation?currentLocation[0].latitude:37.42342342342342,
     longitude: currentLocation?currentLocation[0].longitude:-122.08395287867832,
-    latitudeDelta: 0.23,
-    longitudeDelta: 0.23,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.02,
   }
+  RNLocation.configure({ distanceFilter: 0,maxWaitTime: 5000,    interval: 5000,});
+  RNLocation.getLatestLocation({ timeout: 5000 })
+  .then(latestLocation => {
+    console.log('yeni konum ayarlandı : ' + JSON.stringify(latestLocation));
+    //setparkingSpaces(latestLocation)
+
+    
+  })
   const onRegionChange = (region: Region, details: Details) => {
 
     setRegion(region);
@@ -130,15 +145,31 @@ function App(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
+  
   return (
     <SafeAreaView style={backgroundStyle}>
       <View style={styles.container}>
         <MapView style={styles.map}
           region={initialRegion}
           onRegionChange={onRegionChange}>
-        </MapView>
+            <Marker
+            coordinate={{latitude: currentLocation?currentLocation[0].latitude:37.42342342342342,
+            longitude: currentLocation?currentLocation[0].longitude:-122.08395287867832}}
+            title={"title"}
+            description={"description"}
+         />
 
+{parkingSpaces.map((val, index) => {
+  return (<Marker
+          coordinate={{
+          latitude: parkingSpaces?parkingSpaces[0].latitude:37.42342342342342,
+          longitude: parkingSpaces?parkingSpaces[0].longitude:-122.08395287867832
+          }}
+          key={index}
+          title = {"parking markers"}
+         />); 
+ })}
+        </MapView>
       </View>
     </SafeAreaView>
   );
@@ -159,3 +190,5 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+

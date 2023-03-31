@@ -1,78 +1,78 @@
-export interface Location {
+export interface ILocationServis {
     /**
      * The time that the device was at this location.
      * @platform android ios
      */
-    timestamp: number;
+    timestamp: string;
     /**
      * The latitude of the location.
      * @platform android ios
      */
-    latitude: number;
+    latitude: string;
     /**
      * The longitude of the location.
      * @platform android ios
      */
-    longitude: number;
+    longitude: string;
     /**
      * The radius of uncertainty for the location, measured in meters.
      * @platform android ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423599-horizontalaccuracy?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getAccuracy())
      */
-    accuracy: number;
+    accuracy: string;
     /**
      * The altitude of the location in meters.
      * @platform android ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423820-altitude?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getAltitude())
      */
-    altitude: number;
+    altitude: string;
     /**
      * The accuracy of the altitude value, measured in meters.
      * @platform android ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423550-verticalaccuracy?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getVerticalAccuracyMeters())
      */
-    altitudeAccuracy: number;
+    altitudeAccuracy: string;
     /**
      * The direction in which the device is traveling, measured in degrees and relative to due north.
      * @platform android ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423832-course?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getBearing())
      */
-    course: number;
+    course: string;
     /**
      * Get the estimated course accuracy of this location, in degrees.
      * @platform android
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getBearingAccuracyDegrees())
      */
-    courseAccuracy?: number;
+    courseAccuracy?: string;
     /**
      * The instantaneous speed of the device, measured in meters per second.
      * @platform android ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423798-speed?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getSpeed())
      */
-    speed: number;
+    speed: string;
     /**
      * Get the estimated speed accuracy of this location, in meters per second.
      * @platform android
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getSpeedAccuracyMetersPerSecond())
      */
-    speedAccuracy?: number;
+    speedAccuracy?: string;
     /**
      * The logical floor of the building in which the user is located.
      * @platform ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1616762-floor?language=objc)
      */
-    floor?: number;
+    floor?: string;
     /**
      * If the location comes from a mock provider.
      * @platform android
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#isFromMockProvider())
      */
-    fromMockProvider?: boolean;
+    fromMockProvider?: string;
 
     userid?: number;
 }

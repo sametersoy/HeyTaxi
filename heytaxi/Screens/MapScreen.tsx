@@ -22,11 +22,10 @@ import {
 import MapView, { Details, LatLng, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import { enableLatestRenderer } from 'react-native-maps';
 import RNLocation, { subscribeToLocationUpdates, Subscription } from 'react-native-location';
-import { Location } from './Models/Location';
-import { addLocation } from './Services/LocationServis';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MapScreen from './Screens/MapScreen'
+import { Location } from '../Models/Location';
+import { addLocation } from '../Services/LocationServis';
+
+
 enableLatestRenderer();
 
 RNLocation.configure({
@@ -61,9 +60,8 @@ RNLocation.requestPermission({
     }
   }
 });
-const Stack = createNativeStackNavigator();
 
-function App(): JSX.Element {
+export function MapScreen(): JSX.Element {
 
   useEffect(() => {
       RNLocation.requestPermission({
@@ -126,11 +124,33 @@ function App(): JSX.Element {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={MapScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={backgroundStyle}>
+      <View style={styles.container}>
+        <MapView style={styles.map}
+          region={initialRegion}
+          onRegionChange={onRegionChange}>
+          <Marker
+            coordinate={{
+              latitude: currentLocation ? currentLocation[0].latitude : 37.42342342342342,
+              longitude: currentLocation ? currentLocation[0].longitude : -122.08395287867832
+            }}
+            title={"title"}
+            description={"description"}
+          />
+
+          {parkingSpaces.map((val, index) => {
+            return (<Marker
+              coordinate={{
+                latitude: parkingSpaces ? parkingSpaces[0].latitude : 37.42342342342342,
+                longitude: parkingSpaces ? parkingSpaces[0].longitude : -122.08395287867832
+              }}
+              key={index}
+              title={"parking markers"}
+            />);
+          })}
+        </MapView>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -148,6 +168,6 @@ const styles = StyleSheet.create({
 
 });
 
-export default App;
+export default MapScreen;
 
 

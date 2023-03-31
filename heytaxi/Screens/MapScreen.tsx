@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
+  Button,
   Dimensions,
   Platform,
   SafeAreaView,
@@ -24,6 +25,8 @@ import { enableLatestRenderer } from 'react-native-maps';
 import RNLocation, { subscribeToLocationUpdates, Subscription } from 'react-native-location';
 import { Location } from '../Models/Location';
 import { addLocation } from '../Services/LocationServis';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 enableLatestRenderer();
@@ -61,7 +64,7 @@ RNLocation.requestPermission({
   }
 });
 
-export function MapScreen(): JSX.Element {
+export function MapScreen(props: any ): JSX.Element {
 
   useEffect(() => {
       RNLocation.requestPermission({
@@ -119,12 +122,10 @@ export function MapScreen(): JSX.Element {
     setRegion(region);
   }
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView >
       <View style={styles.container}>
         <MapView style={styles.map}
           region={initialRegion}
@@ -156,10 +157,7 @@ export function MapScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+  
   },
   map: {
     width: Dimensions.get('window').width,

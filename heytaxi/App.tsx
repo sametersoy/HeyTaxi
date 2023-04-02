@@ -40,8 +40,8 @@ function App(): JSX.Element {
     <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen name="Login" component={Login} options={{headerShadowVisible:false}} />
-        <Stack.Screen name="Register" component={Register} options={{headerShadowVisible:false}} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -6,5 +6,8 @@ export const GetLocation="/Location/GetLocation";
 
 export const AddLocation="/Location/AddLocation";
 
+export const Register="/Account/Register";
+
+
 
 

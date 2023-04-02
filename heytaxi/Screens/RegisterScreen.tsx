@@ -1,49 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Button } from 'react-native';
+import { addRegister } from '../Services/RegisterServis';
+import { IUser } from '../Models/IUser'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-export function Register(props: any ): JSX.Element {
- 
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [passwordR, setPasswordR] = useState('');
+export function Register(props: any): JSX.Element {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordR, setPasswordR] = useState('');
 
 
-const handleLogin = () => {
-  // Login işlemleri burada gerçekleştirilebilir
-  console.log(`Email: ${email}, Password: ${password}, PasswordR: ${passwordR}`);
-}
+  async function handleLogin() {
+    // Login işlemleri burada gerçekleştirilebilir
+    console.log(`Email: ${email}, Password: ${password}, PasswordR: ${passwordR}`);
+    if (password === passwordR) {
+      const user: IUser = {
+        email: email,
+        password: password,
+        created_date: new Date(),
+        created_by: 'test'
+      }
+      await addRegister(user).then((res) => {
+        console.log("register response : " + res.token)
+        if (res.token !== undefined) {
+          AsyncStorage.setItem('Token', res.token);
+          props.navigation.navigate("Map");
+        }
+      });
+
+    }
+
+  }
 
   return (
     <SafeAreaView >
       <View style={styles.container}>
-      <Text style={styles.title}> Giriş Yap</Text>
-      <TextInput 
-        style={styles.input} 
-        placeholder="E-posta adresi" 
-        onChangeText={(text) => setEmail(text)}
-        value={email}
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Şifre" 
-        secureTextEntry={true} 
-        onChangeText={(text) => setPassword(text)}
-        value={password}
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Şifre Tekrar" 
-        secureTextEntry={true} 
-        onChangeText={(text) => setPasswordR(text)}
-        value={passwordR}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Kaydet</Text>
-      </TouchableOpacity>
-  
-    </View>
+        <Text style={styles.title}> Giriş Yap</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="E-posta adresi"
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre"
+          secureTextEntry={true}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre Tekrar"
+          secureTextEntry={true}
+          onChangeText={(text) => setPasswordR(text)}
+          value={passwordR}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Kaydet</Text>
+        </TouchableOpacity>
+
+      </View>
     </SafeAreaView>
   );
 }
@@ -54,8 +74,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
-    marginTop: height/2.5
-    
+    marginTop: height / 2.5
+
   },
   title: {
     fontSize: 24,

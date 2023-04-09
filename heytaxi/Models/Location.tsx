@@ -34,14 +34,14 @@ export interface Location {
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423550-verticalaccuracy?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getVerticalAccuracyMeters())
      */
-    altitudeAccuracy: number;
+    altitudeAccuracy?: number;
     /**
      * The direction in which the device is traveling, measured in degrees and relative to due north.
      * @platform android ios
      * @see [Apple Docs](https://developer.apple.com/documentation/corelocation/cllocation/1423832-course?language=objc)
      * @see [Android Docs](https://developer.android.com/reference/android/location/Location.html#getBearing())
      */
-    course: number;
+    course?: number;
     /**
      * Get the estimated course accuracy of this location, in degrees.
      * @platform android

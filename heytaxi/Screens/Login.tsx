@@ -1,16 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Button } from 'react-native';
+import { GetLogin } from '../Services/LoginServis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export function Login(props: any ): JSX.Element {
- 
+  useEffect(() => {
+    async function TokenKontrol() {
+      let token = await AsyncStorage.getItem('Token');
+      if (token != null) {
+        console.log('TokenKontrol : ' + token);
+        props.navigation.navigate("Map");
+      }
+      else {
+        console.log('TokenKontrol else : ' + token);
+      }
+    }
+    TokenKontrol()
+  }, []);
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 
 const handleLogin = () => {
   // Login işlemleri burada gerçekleştirilebilir
   console.log(`Email: ${email}, Password: ${password}`);
+
+  GetLogin(email,password).then(login => {
+    if (login.token !== undefined) {
+      AsyncStorage.setItem('Token', login.token);
+      props.navigation.navigate("Map");
+    }
+  })
 }
 
   return (

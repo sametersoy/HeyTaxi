@@ -14,6 +14,8 @@ import Login from './Screens/Login';
 import Register from './Screens/RegisterScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChooseScreen from './Screens/ChooseScreen';
+import { Provider } from 'react-redux';
+import { store } from './Redux/Store';
 
 
 //https://stackoverflow.com/questions/71625768/location-tracking-in-react-native-even-if-app-is-closed
@@ -39,6 +41,7 @@ const Stack = createNativeStackNavigator();
 
 function App(): JSX.Element {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={Login} options={{headerShown:false,title: 'Giriş'}} />
@@ -47,6 +50,7 @@ function App(): JSX.Element {
         <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider> 
   );
 }
 

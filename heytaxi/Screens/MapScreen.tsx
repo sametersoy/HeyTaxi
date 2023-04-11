@@ -22,6 +22,7 @@ import { enableLatestRenderer } from 'react-native-maps';
 import { addLocation, getAllLocation } from '../Services/LocationServis';
 import { GetAllLocation } from '../Services/ServisConfig';
 import GetLocation from 'react-native-get-location';
+import { IMarkerCoordinate } from '../Models/IMarkerCoordinate';
 
 
 enableLatestRenderer();
@@ -82,7 +83,7 @@ export function MapScreen(props: any): JSX.Element {
         timeout: 5000,
       })
         .then(location => {
-          console.log("readed location : " + JSON.stringify( location));
+          console.log("readed location : " + JSON.stringify(location));
           let locationnew: Location[] = [{
             latitude: location.latitude,
             timestamp: location.time,
@@ -122,7 +123,7 @@ export function MapScreen(props: any): JSX.Element {
     //dispatch(currentloc(region[0]))
 
   };
-  const [parkingSpaces, setparkingSpaces] = useState<Location[]>([])
+  const [parkingSpaces, setparkingSpaces] = useState<IMarkerCoordinate[]>([])
   const [region, setRegion] = React.useState<Region>(initialRegion);
 
   /*   RNLocation.getLatestLocation({ timeout: 5000 })
@@ -131,28 +132,33 @@ export function MapScreen(props: any): JSX.Element {
         // Use the location here
       }) */
   async function setLocation(locations: Location[]) {
-    console.log("setLocation : " + JSON.stringify(locations[0]));
+    //console.log("setLocation : " + JSON.stringify(locations[0]));
     //setCurrentLocation(locations)
     //setparkingSpaces(locations)
-    let nlocation: Location = { ...locations[0], userid: 1 }
+    //let nlocation: Location = { ...locations[0], userid: 1 }
 
-    await addLocation(nlocation).then((getLocation) => {
+    await addLocation(locations[0]).then((getLocation) => {
       console.log("addLocation working : " + JSON.stringify(getLocation));
-      
+
     })
 
-   await getAll()
-   
+    await getAll()
+
   }
 
-async function getAll(){
-  //new location added after triger get all locations
-  await getAllLocation().then((result: Location[]) => {
-    
-    setparkingSpaces(result)
-  })
+  async function getAll() {
+    //new location added after triger get all locations
+    await getAllLocation().then((result: Location[]) => {
+      let nlocation: IMarkerCoordinate[] = []
+      result.forEach((location: Location) => {
+        nlocation.push({ longitude: parseFloat(location.longitude.toString()), latitude: parseFloat(location.latitude.toString()) })
+      })
+      console.log(JSON.stringify(nlocation) );
+      
+      setparkingSpaces(nlocation)
+    })
 
-}
+  }
 
   const onRegionChange = (region: Region, details: Details) => {
     //setRegion(region);
@@ -161,25 +167,23 @@ async function getAll(){
     <SafeAreaView >
       <View style={styles.container}>
         <MapView style={styles.map}
-          region={initialRegion}
+          initialRegion={{
+            latitude: 41.344520,
+            longitude: 36.254393,
+            latitudeDelta: 50,
+            longitudeDelta: 50,//0.02,
+          }}
+          //region={initialRegion}
           onRegionChange={onRegionChange}>
           {parkingSpaces.map((val, index) => {
-            //console.log("adding marker ........");
-            //console.log("latitude: " + val.latitude + " lon: " +val.longitude);
-
             return (<Marker
               coordinate={{
-                /*  latitude: parkingSpaces ? parkingSpaces[0].latitude : 37.42342342342342,
-                 longitude: parkingSpaces ? parkingSpaces[0].longitude : -122.08395287867832 */
-                latitude: parseFloat(val.latitude.toString()),
-                longitude: parseFloat(val.longitude.toString())
+                latitude: val.latitude,
+                longitude: val.longitude
               }}
               key={index}
-              title={"Budayız..."}>
-              <Image source={require('../Assets/markerHuman.png')} style={{ height: 45, width: 45 }} />
-            </Marker>
-
-            );
+              title={"parking markers"}
+            />);
           })}
         </MapView>
       </View>

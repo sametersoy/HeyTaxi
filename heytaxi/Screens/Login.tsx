@@ -29,7 +29,7 @@ const handleLogin = () => {
   GetLogin(email,password).then(login => {
     if (login.token !== undefined) {
       AsyncStorage.setItem('Token', login.token);
-      props.navigation.navigate("Map");
+      props.navigation.navigate("Choose");
     }
   })
 }

@@ -49,7 +49,7 @@ export async function addLocation(location: Location): Promise<any> {
   var data = fetch(defaultLink + AddLocation, {
     method: "POST",
     headers: { "Content-type": "application/json", "Authorization": "Bearer " + token },
-    body: JSON.stringify(ILocationServis),
+    body: JSON.stringify(location),
   }).then((response) => response.json()).then((json) => {
     return json;
   }).catch((error) => {

@@ -75,4 +75,6 @@ export interface Location {
     fromMockProvider?: boolean;
 
     userid?: number;
+    type?: string;
+
 }

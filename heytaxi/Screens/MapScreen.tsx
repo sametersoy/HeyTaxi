@@ -82,7 +82,7 @@ export function MapScreen(props: any): JSX.Element {
         timeout: 5000,
       })
         .then(location => {
-          console.log("new get location : " + location);
+          console.log("readed location : " + JSON.stringify( location));
           let locationnew: Location[] = [{
             latitude: location.latitude,
             timestamp: location.time,
@@ -98,6 +98,8 @@ export function MapScreen(props: any): JSX.Element {
         .catch(error => {
           const { code, message } = error;
           console.warn(code, message);
+          getAll()
+
         })
     }, 10000);
 
@@ -112,7 +114,7 @@ export function MapScreen(props: any): JSX.Element {
     latitude: currentLocation[0].latitude,
     longitude: currentLocation[0].longitude,
     latitudeDelta: 0.02,//0.02,
-    longitudeDelta: 0.02//0.02,
+    longitudeDelta: 0.05//0.02,
   }
   const isDarkMode = useColorScheme() === 'dark';
   const mapRegionChangehandle = (region: any) => {
@@ -129,25 +131,28 @@ export function MapScreen(props: any): JSX.Element {
         // Use the location here
       }) */
   async function setLocation(locations: Location[]) {
-    console.log("map location : " + JSON.stringify(locations[0]));
-    setCurrentLocation(locations)
-    setparkingSpaces(locations)
+    console.log("setLocation : " + JSON.stringify(locations[0]));
+    //setCurrentLocation(locations)
+    //setparkingSpaces(locations)
     let nlocation: Location = { ...locations[0], userid: 1 }
-    console.log("nlocation : " + nlocation);
 
     await addLocation(nlocation).then((getLocation) => {
+      console.log("addLocation working : " + JSON.stringify(getLocation));
+      
     })
 
-    //new location added after triger get all locations
-
-    await getAllLocation().then((result: Location[]) => {
-      result.forEach((location: Location) => {
-        //console.log("result allLocation : " +JSON.stringify(location) );
-
-      })
-      setparkingSpaces(result)
-    })
+   await getAll()
+   
   }
+
+async function getAll(){
+  //new location added after triger get all locations
+  await getAllLocation().then((result: Location[]) => {
+    
+    setparkingSpaces(result)
+  })
+
+}
 
   const onRegionChange = (region: Region, details: Details) => {
     //setRegion(region);

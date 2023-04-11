@@ -75,4 +75,7 @@ export interface ILocationServis {
     fromMockProvider?: string;
 
     userid?: number;
+
+    type?: string;
+
 }

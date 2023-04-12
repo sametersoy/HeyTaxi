@@ -1,18 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
-  Button,
   Dimensions,
   Image,
-  Platform,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useColorScheme,
   View,
 } from 'react-native';
 
@@ -20,63 +12,15 @@ import MapView, { Callout, Details, LatLng, Marker, PROVIDER_DEFAULT, PROVIDER_G
 import { enableLatestRenderer } from 'react-native-maps';
 /* import RNLocation, { subscribeToLocationUpdates, Subscription } from 'react-native-location'; */import { Location } from '../Models/Location';
 import { addLocation, getAllLocation } from '../Services/LocationServis';
-import { GetAllLocation } from '../Services/ServisConfig';
 import GetLocation from 'react-native-get-location';
 import { IMarkerCoordinate } from '../Models/IMarkerCoordinate';
 
 
 enableLatestRenderer();
 
-/* RNLocation.configure({
-  distanceFilter: 0.5, // Meters
-  desiredAccuracy: {
-    ios: "best",
-    android: "balancedPowerAccuracy"
-  },
-  // Android only
-  androidProvider: "auto",
-  interval: 5000, // Milliseconds
-  fastestInterval: 10000, // Milliseconds
-  maxWaitTime: 5000, // Milliseconds
-  // iOS Only
-  activityType: "other",
-  allowsBackgroundLocationUpdates: true,
-  headingFilter: 1, // Degrees
-  headingOrientation: "portrait",
-  pausesLocationUpdatesAutomatically: false,
-  showsBackgroundLocationIndicator: false,
-}) */
-
-/* RNLocation.requestPermission({
-  ios: 'whenInUse', // or 'always'
-  android: {
-    detail: 'fine', // or 'fine'
-    rationale: {
-      title: "We need to access your location",
-      message: "We use your location to show where you are on the map",
-      buttonPositive: "OK",
-      buttonNegative: "Cancel"
-    }
-  }
-}); */
-
 export function MapScreen(props: any): JSX.Element {
 
   useEffect(() => {
-    /*  RNLocation.requestPermission({
-       ios: "whenInUse",
-       android: {
-         detail: "coarse"
-       }
-     }).then(granted => {
-       if (granted) {
-         let locationSubscription = RNLocation.subscribeToLocationUpdates((locations) => {
-           setLocation(locations)
-           console.log('subscribeToLocationUpdates : ' + locations);
-         })
-       }
-     }) */
-
     setInterval(() => {
       GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
@@ -103,47 +47,14 @@ export function MapScreen(props: any): JSX.Element {
 
         })
     }, 10000);
-
-
   }, [])
 
-
-
-  const [currentLocation, setCurrentLocation] = React.useState<Location[]>([{ latitude: 41.344520, longitude: 36.254393 }]);
-
-  const initialRegion: Region = {
-    latitude: currentLocation[0].latitude,
-    longitude: currentLocation[0].longitude,
-    latitudeDelta: 0.02,//0.02,
-    longitudeDelta: 0.05//0.02,
-  }
-  const isDarkMode = useColorScheme() === 'dark';
-  const mapRegionChangehandle = (region: any) => {
-    setRegion(region);
-    //dispatch(currentloc(region[0]))
-
-  };
   const [parkingSpaces, setparkingSpaces] = useState<IMarkerCoordinate[]>([])
-  const [region, setRegion] = React.useState<Region>(initialRegion);
-
-  /*   RNLocation.getLatestLocation({ timeout: 5000 })
-      .then(latestLocation => {
-        console.log(("latestLocation : " + latestLocation));
-        // Use the location here
-      }) */
   async function setLocation(locations: Location[]) {
-    //console.log("setLocation : " + JSON.stringify(locations[0]));
-    //setCurrentLocation(locations)
-    //setparkingSpaces(locations)
-    //let nlocation: Location = { ...locations[0], userid: 1 }
-
     await addLocation(locations[0]).then((getLocation) => {
       console.log("addLocation working : " + JSON.stringify(getLocation));
-
     })
-
     await getAll()
-
   }
 
   async function getAll() {
@@ -151,13 +62,24 @@ export function MapScreen(props: any): JSX.Element {
     await getAllLocation().then((result: Location[]) => {
       let nlocation: IMarkerCoordinate[] = []
       result.forEach((location: Location) => {
-        nlocation.push({ longitude: parseFloat(location.longitude.toString()), latitude: parseFloat(location.latitude.toString()) })
+        nlocation.push({ longitude: parseFloat(location.longitude.toString()), latitude: parseFloat(location.latitude.toString()), type: location.type })
       })
-      console.log(JSON.stringify(nlocation) );
-      
+      console.log(JSON.stringify(nlocation));
+
       setparkingSpaces(nlocation)
     })
 
+  }
+  const GetMarker = ({ type }: { type?: string }) => {
+    if (type === "T") {
+      return (
+        <Image source={require("../Assets/markerTaxi.png")} style={{ height: 45, width: 45 }} />
+      )
+    } else {
+      return (
+        <Image source={require("../Assets/markerHuman.png")} style={{ height: 45, width: 45 }} />
+      )
+    }
   }
 
   const onRegionChange = (region: Region, details: Details) => {
@@ -170,12 +92,13 @@ export function MapScreen(props: any): JSX.Element {
           initialRegion={{
             latitude: 41.344520,
             longitude: 36.254393,
-            latitudeDelta: 50,
-            longitudeDelta: 50,//0.02,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.04,
           }}
           //region={initialRegion}
           onRegionChange={onRegionChange}>
           {parkingSpaces.map((val, index) => {
+
             return (<Marker
               coordinate={{
                 latitude: val.latitude,
@@ -183,7 +106,10 @@ export function MapScreen(props: any): JSX.Element {
               }}
               key={index}
               title={"parking markers"}
-            />);
+            >
+              <GetMarker type={val.type} />
+
+            </Marker>);
           })}
         </MapView>
       </View>
@@ -199,8 +125,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-
-
 });
 
 export default MapScreen;

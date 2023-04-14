@@ -27,7 +27,7 @@ export function Register(props: any): JSX.Element {
         console.log("register response : " + res.token)
         if (res.token !== undefined) {
           AsyncStorage.setItem('Token', res.token);
-          props.navigation.navigate("Map");
+          props.navigation.navigate("Choose");
         }
       });
 
@@ -60,8 +60,14 @@ export function Register(props: any): JSX.Element {
           value={passwordR}
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Kaydet</Text>
+          <Text style={styles.buttonText}>Giriş</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btnRegister} onPress={() => {
+           props.navigation.navigate('Login', {});
+      }}>
+        <Text style={styles.btnRegistertext}>Giriş</Text>
+      </TouchableOpacity>
 
       </View>
     </SafeAreaView>
@@ -102,6 +108,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
+  btnRegister: {
+    //backgroundColor: '#333',
+    width: '80%',
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  btnRegistertext:{
+    color: 'black',
+    fontSize: 20,
+    fontWeight: 'bold',
+    alignSelf:'flex-start',
+  }
 
 });
 

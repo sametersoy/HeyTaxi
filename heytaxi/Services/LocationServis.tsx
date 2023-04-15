@@ -3,6 +3,8 @@ import { ILocationServis } from "../Models/ILocationServis";
 
 import { defaultLink, GetLocation, AddLocation, GetAllLocation } from "./ServisConfig"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Redux/Store";
 
 export async function getLocation(): Promise<Location> {
   const token = await AsyncStorage.getItem('Token');
@@ -34,7 +36,10 @@ export async function getAllLocation(): Promise<Location[]> {
 
 export async function addLocation(location: Location): Promise<any> {
   const token = await AsyncStorage.getItem('Token');
-  //console.log("addRegister: " + JSON.stringify(location) );
+  const rType = useSelector((state: RootState) => state.currentType.value)
+  const dispatch = useDispatch()
+
+  console.log("addRegister: " + JSON.stringify(rType) );
   let ILocationServis: ILocationServis = {
     timestamp: location.timestamp.toString(),
     latitude: location.latitude.toString(),
@@ -45,6 +50,7 @@ export async function addLocation(location: Location): Promise<any> {
     course:location.course? location.course.toString():"",
     speed: location.speed.toString(),
     userid: 1,
+    type: rType
   }
   var data = fetch(defaultLink + AddLocation, {
     method: "POST",

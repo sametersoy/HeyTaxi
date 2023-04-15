@@ -14,19 +14,28 @@ import { enableLatestRenderer } from 'react-native-maps';
 import { addLocation, getAllLocation } from '../Services/LocationServis';
 import GetLocation from 'react-native-get-location';
 import { IMarkerCoordinate } from '../Models/IMarkerCoordinate';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/Store';
 
 
 enableLatestRenderer();
 
 export function MapScreen(props: any): JSX.Element {
+  const rType = useSelector((state: RootState) => state.currentType.value)
+  const dispatch = useDispatch()
+  console.log("Type : " + rType);
 
+  
   useEffect(() => {
+
     setInterval(() => {
       GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 6000,
       })
         .then(location => {
+          console.log("Type use effect : " + rType);
+
           console.log("readed location : " + JSON.stringify(location));
           let locationnew: Location[] = [{
             latitude: location.latitude,
@@ -36,14 +45,15 @@ export function MapScreen(props: any): JSX.Element {
             altitude: location.altitude,
             altitudeAccuracy: location.verticalAccuracy,
             course: location.course,
-            speed: location.speed
+            speed: location.speed,
+            type: rType
           }]
           setLocation(locationnew);
         })
         .catch(error => {
           const { code, message } = error;
           console.warn(code, message);
-          getAll()
+          //getAll()
 
         })
     }, 10000);
@@ -51,8 +61,12 @@ export function MapScreen(props: any): JSX.Element {
 
   const [parkingSpaces, setparkingSpaces] = useState<IMarkerCoordinate[]>([])
   async function setLocation(locations: Location[]) {
+    console.log("asdasdasd : " + locations[0].type);
+
     await addLocation(locations[0]).then((getLocation) => {
-      console.log("addLocation working : " + JSON.stringify(getLocation));
+      console.log("addLocation working : " + locations[0].type);
+
+      console.log("addLocation working : " + getLocation.type);
     })
     await getAll()
   }
@@ -64,7 +78,7 @@ export function MapScreen(props: any): JSX.Element {
       result.forEach((location: Location) => {
         nlocation.push({ longitude: parseFloat(location.longitude.toString()), latitude: parseFloat(location.latitude.toString()), type: location.type })
       })
-      console.log(JSON.stringify(nlocation));
+      //console.log(JSON.stringify(nlocation));
 
       setparkingSpaces(nlocation)
     })

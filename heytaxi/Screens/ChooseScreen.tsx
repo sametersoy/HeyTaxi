@@ -3,6 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dime
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import react from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/Store';
+import { currentType } from '../Redux/Slicers/LocationTypeSlice';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -22,7 +25,8 @@ export function Choose(props: any): JSX.Element {
     TokenKontrol()
   }, []);
 
-  //const dispatch = useDispatch()
+  const rType = useSelector((state: RootState) => state.currentType.value)
+  const dispatch = useDispatch()  
 
   const shopAnim = react.useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
   const shopAnimRotating = shopAnim.interpolate({
@@ -61,8 +65,8 @@ export function Choose(props: any): JSX.Element {
         <View style={styles.content1}>
           <TouchableOpacity
             onPress={() => {
+              dispatch(currentType("Y",))
               props.navigation.navigate("Map")
-              //dispatch(increment())
             }}>
             <Icon name="sports-handball" size={100} color="white" />
             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 28, alignSelf: 'center' }}>Yolcu</Text>
@@ -79,7 +83,10 @@ export function Choose(props: any): JSX.Element {
       }}>
         <View style={styles.content3}>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("Map")}>
+            onPress={() => {
+              dispatch(currentType("T",))
+              props.navigation.navigate("Map")
+            }}>
             <Icon name="local-taxi" size={100} color="white" />
             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 28, alignSelf: 'center' }}>Taxi</Text>
           </TouchableOpacity>

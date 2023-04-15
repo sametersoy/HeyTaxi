@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './Slicers/counterSlice'
 import locationReduser, { currentloc } from './Slicers/LocationSlice'
+import LocationTypeSlice, { currentType } from './Slicers/LocationTypeSlice'
 export const store = configureStore({
   reducer: {
     counter:counterReducer,
-    currentloc:locationReduser
+    currentloc:locationReduser,
+    currentType:LocationTypeSlice
   },
 })
 

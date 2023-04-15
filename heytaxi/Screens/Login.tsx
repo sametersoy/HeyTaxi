@@ -11,7 +11,7 @@ export function Login(props: any ): JSX.Element {
       let token = await AsyncStorage.getItem('Token');
       if (token != null) {
         console.log('TokenKontrol : ' + token);
-        props.navigation.navigate("Map");
+        props.navigation.navigate("Choose");
       }
       else {
         console.log('TokenKontrol else : ' + token);

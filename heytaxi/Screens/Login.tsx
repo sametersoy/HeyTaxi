@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Button, Image } from 'react-native';
 import { GetLogin } from '../Services/LoginServis';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('window').width;
@@ -36,7 +36,10 @@ const handleLogin = () => {
 
   return (
     <SafeAreaView >
+      
       <View style={styles.container}>
+      <Image source={require("../Assets/logobg.png")} style={{ height: 200, width: 250 }} />
+
       <Text style={styles.title}> Giriş Yap</Text>
       <TextInput 
         style={styles.input} 

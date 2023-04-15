@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Dimensions, Button, Image } from 'react-native';
 import { addRegister } from '../Services/RegisterServis';
 import { IUser } from '../Models/IUser'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,6 +38,7 @@ export function Register(props: any): JSX.Element {
   return (
     <SafeAreaView >
       <View style={styles.container}>
+      <Image source={require("../Assets/logobg.png")} style={{ height: 200, width: 250 }} />
         <Text style={styles.title}> Giriş Yap</Text>
         <TextInput
           style={styles.input}
@@ -60,7 +61,7 @@ export function Register(props: any): JSX.Element {
           value={passwordR}
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Giriş</Text>
+          <Text style={styles.buttonText}>Kayıt ol</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.btnRegister} onPress={() => {

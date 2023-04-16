@@ -21,22 +21,20 @@ import { RootState } from '../Redux/Store';
 enableLatestRenderer();
 
 export function MapScreen(props: any): JSX.Element {
-  const rType = useSelector((state: RootState) => state.currentType.value)
-  const dispatch = useDispatch()
-  console.log("Type : " + rType);
+ 
+    //let rType = useSelector((state: RootState) => state.currentType.value)
+    const dispatch = useDispatch()
+    const { lType, otherParam } = props.route.params;
 
+    console.log("Type : " + lType);
   
   useEffect(() => {
-
     setInterval(() => {
       GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
         timeout: 6000,
       })
         .then(location => {
-          console.log("Type use effect : " + rType);
-
-          console.log("readed location : " + JSON.stringify(location));
           let locationnew: Location[] = [{
             latitude: location.latitude,
             timestamp: location.time,
@@ -46,14 +44,13 @@ export function MapScreen(props: any): JSX.Element {
             altitudeAccuracy: location.verticalAccuracy,
             course: location.course,
             speed: location.speed,
-            type: rType
           }]
           setLocation(locationnew);
         })
         .catch(error => {
           const { code, message } = error;
           console.warn(code, message);
-          //getAll()
+          getAll()
 
         })
     }, 10000);
@@ -61,12 +58,11 @@ export function MapScreen(props: any): JSX.Element {
 
   const [parkingSpaces, setparkingSpaces] = useState<IMarkerCoordinate[]>([])
   async function setLocation(locations: Location[]) {
-    console.log("asdasdasd : " + locations[0].type);
-
-    await addLocation(locations[0]).then((getLocation) => {
-      console.log("addLocation working : " + locations[0].type);
-
-      console.log("addLocation working : " + getLocation.type);
+  
+    console.log("add register working : "+lType);
+    
+    let newaddLocation:Location = {...locations[0],type:lType} 
+    await addLocation(newaddLocation).then((getLocation) => {
     })
     await getAll()
   }
@@ -84,12 +80,12 @@ export function MapScreen(props: any): JSX.Element {
     })
 
   }
-  const GetMarker = ({ type }: { type?: string }) => {
+  const GetMarkerImage = ({ type }: { type?: string }) => {
     if (type === "T") {
       return (
         <Image source={require("../Assets/markerTaxi.png")} style={{ height: 45, width: 45 }} />
       )
-    } else {
+    } else {      
       return (
         <Image source={require("../Assets/markerHuman.png")} style={{ height: 45, width: 45 }} />
       )
@@ -119,9 +115,9 @@ export function MapScreen(props: any): JSX.Element {
                 longitude: val.longitude
               }}
               key={index}
-              title={"parking markers"}
+              title={"title"}
             >
-              <GetMarker type={val.type} />
+              <GetMarkerImage type={val.type} />
 
             </Marker>);
           })}

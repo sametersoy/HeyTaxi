@@ -36,10 +36,9 @@ export async function getAllLocation(): Promise<Location[]> {
 
 export async function addLocation(location: Location): Promise<any> {
   const token = await AsyncStorage.getItem('Token');
-  const rType = useSelector((state: RootState) => state.currentType.value)
-  const dispatch = useDispatch()
 
-  console.log("addRegister: " + JSON.stringify(rType) );
+
+  console.log("addRegister: " + JSON.stringify(location.type) );
   let ILocationServis: ILocationServis = {
     timestamp: location.timestamp.toString(),
     latitude: location.latitude.toString(),
@@ -50,9 +49,9 @@ export async function addLocation(location: Location): Promise<any> {
     course:location.course? location.course.toString():"",
     speed: location.speed.toString(),
     userid: 1,
-    type: rType
+    type: location.type
   }
-  var data = fetch(defaultLink + AddLocation, {
+  var data = await fetch(defaultLink + AddLocation, {
     method: "POST",
     headers: { "Content-type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify(ILocationServis),

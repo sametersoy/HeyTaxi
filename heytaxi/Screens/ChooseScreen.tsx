@@ -65,8 +65,11 @@ export function Choose(props: any): JSX.Element {
         <View style={styles.content1}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(currentType("Y",))
-              props.navigation.navigate("Map")
+              //dispatch(currentType("Y"))
+              props.navigation.navigate("Map",{
+                lType: "Y",
+                otherParam: 'anything you want here',
+              })
             }}>
             <Icon name="sports-handball" size={100} color="white" />
             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 28, alignSelf: 'center' }}>Yolcu</Text>
@@ -84,8 +87,11 @@ export function Choose(props: any): JSX.Element {
         <View style={styles.content3}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(currentType("T",))
-              props.navigation.navigate("Map")
+              //dispatch(currentType("T"))
+              props.navigation.navigate("Map",{
+                lType: "T",
+                otherParam: 'anything you want here',
+              })
             }}>
             <Icon name="local-taxi" size={100} color="white" />
             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 28, alignSelf: 'center' }}>Taxi</Text>

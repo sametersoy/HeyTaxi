@@ -7,13 +7,15 @@ export interface typeState {
 }
 
 const initialState: typeState = {
-  value: "Y",
+  value: "",
 }
 export const locationTypeSlice = createSlice({
   name: 'locationType',
   initialState,
   reducers: {
     currentType: (state, action: PayloadAction<string>) => {
+      console.log("action : "+action.payload);
+      
       state.value = action.payload
     },
   },

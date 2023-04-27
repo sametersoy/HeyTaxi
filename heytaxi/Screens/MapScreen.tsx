@@ -5,6 +5,9 @@ import {
   Image,
   SafeAreaView,
   StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -22,14 +25,14 @@ enableLatestRenderer();
 
 export function MapScreen(props: any): JSX.Element {
  
-    //let rType = useSelector((state: RootState) => state.currentType.value)
+    const rType = useSelector((state: RootState) => state.currentType.value)
     const dispatch = useDispatch()
-    const { lType, otherParam } = props.route.params;
+    //const { lType, otherParam } = props.route.params;
 
-    console.log("Type : " + lType);
+    console.log("Type : " + rType);
   
   useEffect(() => {
-    setInterval(() => {
+   const interval = setInterval(() => {
       GetLocation.getCurrentPosition({
         enableHighAccuracy: true,
         timeout: 6000,
@@ -53,15 +56,17 @@ export function MapScreen(props: any): JSX.Element {
           getAll()
 
         })
-    }, 10000);
+        
+    }, 10000)
+    return () =>clearInterval(interval)
   }, [])
 
   const [parkingSpaces, setparkingSpaces] = useState<IMarkerCoordinate[]>([])
   async function setLocation(locations: Location[]) {
   
-    console.log("add register working : "+lType);
+    console.log("add register working : "+rType);
     
-    let newaddLocation:Location = {...locations[0],type:lType} 
+    let newaddLocation:Location = {...locations[0],type:rType} 
     await addLocation(newaddLocation).then((getLocation) => {
     })
     await getAll()
@@ -69,7 +74,7 @@ export function MapScreen(props: any): JSX.Element {
 
   async function getAll() {
     //new location added after triger get all locations
-    await getAllLocation().then((result: Location[]) => {
+    await getAllLocation(rType).then((result: Location[]) => {
       let nlocation: IMarkerCoordinate[] = []
       result.forEach((location: Location) => {
         nlocation.push({ longitude: parseFloat(location.longitude.toString()), latitude: parseFloat(location.latitude.toString()), type: location.type })
@@ -122,6 +127,29 @@ export function MapScreen(props: any): JSX.Element {
             </Marker>);
           })}
         </MapView>
+        <Callout style={styles.searchCallout}>
+          <TextInput
+            //onChangeText={searchText => this.setState({ searchText })}
+            //onSubmitEditing={handleSearch.bind(this)}
+            style={styles.calloutSearch}
+            placeholder={"Search"}
+            value={"searchText"}
+          />
+        </Callout>
+        <Callout style={styles.buttonCallout}>
+          <TouchableOpacity
+            style={[styles.touchable]}
+            onPress={() => console.log("press")}
+          >
+            <Text style={styles.touchableText}>Press Me 1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.touchable]}
+            onPress={() => console.log("press")}
+          >
+            <Text style={styles.touchableText}>Press Me 2</Text>
+          </TouchableOpacity>
+        </Callout>
       </View>
     </SafeAreaView>
   );
@@ -135,6 +163,41 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  buttonCallout: {
+    flex: 1,
+    flexDirection:'row',
+    position:'absolute',
+    bottom:10,
+    alignSelf: "center",
+    justifyContent: "space-between",
+    backgroundColor: "transparent",
+    borderWidth: 0.5,
+    borderRadius: 20
+  },
+  touchable: {
+    backgroundColor: "lightblue",
+    padding: 10,
+    margin: 10
+  },
+  touchableText: {
+    fontSize: 24
+  },
+  searchCallout: {
+    flexDirection: "row",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    width: "80%",
+    marginLeft: "5%",
+    marginTop: 40
+  },
+  calloutSearch: {
+    borderColor: "transparent",
+    marginLeft: 10,
+    width: "90%",
+    marginRight: 10,
+    height: 40,
+    borderWidth: 0.0
+  }
 });
 
 export default MapScreen;

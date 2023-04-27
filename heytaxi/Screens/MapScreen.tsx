@@ -64,10 +64,10 @@ export function MapScreen(props: any): JSX.Element {
   const [parkingSpaces, setparkingSpaces] = useState<IMarkerCoordinate[]>([])
   async function setLocation(locations: Location[]) {
   
-    console.log("add register working : "+rType);
     
     let newaddLocation:Location = {...locations[0],type:rType} 
     await addLocation(newaddLocation).then((getLocation) => {
+      console.log("add register working : "+rType);
     })
     await getAll()
   }
@@ -127,29 +127,8 @@ export function MapScreen(props: any): JSX.Element {
             </Marker>);
           })}
         </MapView>
-        <Callout style={styles.searchCallout}>
-          <TextInput
-            //onChangeText={searchText => this.setState({ searchText })}
-            //onSubmitEditing={handleSearch.bind(this)}
-            style={styles.calloutSearch}
-            placeholder={"Search"}
-            value={"searchText"}
-          />
-        </Callout>
-        <Callout style={styles.buttonCallout}>
-          <TouchableOpacity
-            style={[styles.touchable]}
-            onPress={() => console.log("press")}
-          >
-            <Text style={styles.touchableText}>Press Me 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.touchable]}
-            onPress={() => console.log("press")}
-          >
-            <Text style={styles.touchableText}>Press Me 2</Text>
-          </TouchableOpacity>
-        </Callout>
+       
+         
       </View>
     </SafeAreaView>
   );

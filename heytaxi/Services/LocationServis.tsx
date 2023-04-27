@@ -24,9 +24,9 @@ export async function getAllLocation(type:string): Promise<Location[]> {
   const token = await AsyncStorage.getItem('Token');
   console.log(token);
 
-  console.log(defaultLink + GetAllLocation + "/" +type);
+  console.log(defaultLink + GetAllLocation + "?type=" +type);
 
-  var data = fetch(defaultLink + GetAllLocation + "/" +type  , {
+  var data = fetch(defaultLink + GetAllLocation + "?type=" +type  , {
     method: "GET",
     headers: { "Content-type": "application/json","Authorization": "Bearer " + token }
   }).then((response) => response.json()).then((json) => {

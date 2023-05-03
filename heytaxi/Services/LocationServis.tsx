@@ -32,7 +32,7 @@ export async function getAllLocation(type:string): Promise<Location[]> {
   }).then((response) => response.json()).then((json) => {
     return json;
   }).catch((error) => {
-    console.log("getLocation Service Error: " + error);
+    console.log("getLocation Service Error: " + JSON.stringify(error) );
   });
   return data;
 }
@@ -59,6 +59,8 @@ export async function addLocation(location: Location): Promise<any> {
     headers: { "Content-type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify(ILocationServis),
   }).then((response) => response.json()).then((json) => {
+    //console.log("response: " + JSON.stringify(json));
+    
     return json;
   }).catch((error) => {
     console.log("addLocation Service Error: " + error);

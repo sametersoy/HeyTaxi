@@ -76,7 +76,10 @@ export function MapScreen(props: any): JSX.Element {
     //new location added after triger get all locations
     await getAllLocation(rType).then((result: Location[]) => {
       let nlocation: IMarkerCoordinate[] = []
+      console.log(result);
+
       result.forEach((location: Location) => {
+        
         nlocation.push({ longitude: parseFloat(location.longitude.toString()), latitude: parseFloat(location.latitude.toString()), type: location.type })
       })
       //console.log(JSON.stringify(nlocation));
@@ -86,6 +89,8 @@ export function MapScreen(props: any): JSX.Element {
 
   }
   const GetMarkerImage = ({ type }: { type?: string }) => {
+    console.log("getmarker " +type);
+    
     if (type === "T") {
       return (
         <Image source={require("../Assets/markerTaxi.png")} style={{ height: 45, width: 45 }} />
